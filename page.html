@@ -1,0 +1,151 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickRelease</title>
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #313632;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        .slide-container {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 4rem;
+        }
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 10px;
+            width: 100%;
+            height: 50px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        .slider:hover {
+            opacity: 1;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            background: #ff0000;
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #ff0000;
+            cursor: pointer;
+        }
+        #myRange {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            width: 100%;
+        }
+        .btn-container {
+            margin-top: 8rem;
+        }
+        #myBtn {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            margin-bottom: 6rem;
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px whitesmoke;
+            background-color: red;
+            font-size: 2rem;
+            transition: background-color, color .2s ease-in-out;
+        }
+        #myBtn:disabled {
+            color: lightgrey;
+            background-color: #a6a6a6;
+            box-shadow: 0 0 5px grey;
+        }
+        #myBtn:focus {
+            outline: none;
+        }
+        #countdown {
+            display: block;
+            height: 12px;
+            float: right;
+            font-size: 1.2rem;
+            color: whitesmoke;
+            margin-right: .5rem;
+        }
+        #lock-btn {
+            margin-left: 2rem;
+            border: none;
+            background-color: #ff0000;
+            height: 1.5rem;
+            width: 5rem;
+            border-radius: 10px;
+        }
+        .lock-btn-container {
+            position: absolute;
+            bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+<form action="/release">
+    <div class="slide-container">
+        <p id="countdown"></p>
+        <label for="myRange"></label>
+        <input name="slider" id="myRange" type="range" min="0" max="100" value="0" class="slider"/>
+    </div>
+    <div class="btn-container">
+        <button disabled id="myBtn" type="submit">RELEASE</button>
+    </div>
+</form>
+<a href="/lock" class="lock-btn-container">
+    <button id="lock-btn">Lock</button>
+</a>
+<script type="text/javascript">
+    const slider = document.getElementById('myRange')
+    const button = document.getElementById('myBtn')
+    const cdOutput = document.getElementById('countdown')
+    let countdown
+    const disable = function () {
+        button.setAttribute('disabled', 'disabled')
+        cdOutput.innerText = ""
+        clearInterval(countdown)
+        slider.value = slider.getAttribute('min')
+    }
+    const updateLockCountdown = function (value) {
+        cdOutput.innerText = `auto-lock in ${value.toString()}s`
+    }
+    slider.addEventListener("change", () => {
+        if (slider.value === slider.getAttribute('max')) {
+            let start = 15
+            button.removeAttribute('disabled')
+            updateLockCountdown(start)
+            countdown = setInterval(function () {
+                start--
+                updateLockCountdown(start)
+                if (start <= 0)
+                    disable()
+            }, 1000)
+        } else {
+            disable()
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+#ifndef SYSTEM_CONFIG_H
+#define SYSTEM_CONFIG_H
+
+#define WIFI_SSID "quickrelease"
+#define WIFI_PSK "password"
+
+#define HTTP_USERNAME "admin"
+#define HTTP_PASSWORD "password"
+
+#define SERVO_OPEN 2500
+#define SERVO_LOCKED 500
+
+#endif
